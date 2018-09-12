@@ -1,0 +1,56 @@
+---
+title: "activity_1"
+author: "J Bai"
+date: "9/10/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### dplyr
+##### What were the 5 richest countries in Europe in 1997? 
+```{r}
+gapminder %>%
+  filter(continent=="Europe", year==1997) %>%
+  select(country, gdpPercap) %>%
+  arrange(desc(gdpPercap))
+```
+
+##### What was the total GDP of Japan in 1962?
+```{r}
+gapminder %>%
+  filter(country=="Japan", year==1962) %>%
+  mutate(gdp = gdpPercap*pop) %>%
+  pull(gdp) %>%
+  sum()
+```
+
+##### What was the average life expectancy for each continent in 2007?
+```{r}
+gapminder %>%
+  filter(year==2007) %>%
+  group_by(continent) %>%
+  summarise(mean = mean(lifeExp))
+```
+
+##### How did the average life expectancy of each continent change each year between 1962 and 1997?
+```{r}
+gapminder %>%
+  filter(year>=1962 & year <= 1997) %>%
+  group_by(continent, year) %>%
+  summarise(mean = mean(lifeExp)) %>%
+  View()
+```
+
+### ggplot2
+##### PLOT THE LIFE EXPECTANCY OVER TIME BY EACH CONTINENT WITH A DIFFERENT COLOR FOR EACH CONTINENT.
+```{r}
+gapminder %>%
+  ggplot(., mapping = aes(x = year, y = lifeExp, color = continent, group = country)) + 
+  #geom_point() +
+  #geom_line() +
+  geom_smooth()
+```
+
